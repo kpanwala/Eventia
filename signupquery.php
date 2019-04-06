@@ -6,7 +6,7 @@ $lname=$_SESSION["lname"];
 $dob=$_SESSION["dob"];
 $city=$_SESSION["city"];
 $email=$_SESSION["email"];
-$cusid=rand(1,100000000000000);
+$cusid=rand(1,100000000000)+rand(1,1000000)+rand(1,1000);
 
 
 $servername = "localhost";
@@ -22,21 +22,25 @@ $conn = new mysqli($servername, $username, $password,$db);
     if($result->num_rows==0)
     {
 
-        $sql="SELECT * from login where username='$user'";
+        $sql="SELECT * from login2 where username='$user'";
         $result=$conn->query($sql);
         if($result->num_rows==0)
         {
             // echo "<script>alert('$cusid');</script>";
 
-            $sql="insert into customer values ('$cusid','$fname','$lname','$city','$dob','$cusid','$email','')";
+            $sql="insert into customer values ('$cusid','$fname','$lname','$city','$dob','$email','',1000)";
 
             if (mysqli_query($conn,$sql))
             {
-                $sql="insert into login values ('$user','$pass','$cusid')";
+                $sql="insert into login2 values ('$pass','$user')";
                 if (mysqli_query($conn,$sql))
                 {
-                    echo "<script>window.open('login.php','_self');";
-                    echo "alert('KUDOS !!! Account created :)');</script>";
+                    $sql="insert into login1 values ('$cusid','$user')";
+                    if (mysqli_query($conn,$sql))
+                    {
+                        echo "<script>window.open('login.php','_self');";
+                        echo "alert('KUDOS !!! Account created :)');</script>";
+                    }
                 }    
             }
 
@@ -65,8 +69,7 @@ $conn = new mysqli($servername, $username, $password,$db);
                     <td>".$row["first_name"]."              </td>
                     <td>".$row["last_name"]."               </td>
                     <td>".$row["city"]."            </td>
-                    <td>".$row["dob"]."         </td>
-                    <td>".$row["account_reg_no"]."                      </td>
+                    <td>".$row["dob"]."         </td>                
                     <td>".$row["email"]."               </td>
                     <td>".$row["photo"]."               </td>
                     </tr>";

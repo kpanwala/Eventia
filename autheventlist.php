@@ -10,14 +10,9 @@
 
 </head>
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "12345";
-$db="projectdbms";
+session_start();
+$cusid=$_SESSION["cusid"];
 
-    
-$conn = new mysqli($servername, $username, $password,$db);
-    
 ?>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <style>
@@ -228,6 +223,12 @@ $conn = new mysqli($servername, $username, $password,$db);
         font-size:2vw;
         display:absolute;
     }
+    #price{
+        color:black;
+        margin-left:0vw;
+        font-size:2vw;
+        display:absolute;
+    }
         
 
 
@@ -241,7 +242,7 @@ $conn = new mysqli($servername, $username, $password,$db);
         padding-top:2vh;
         padding-bottom:2vh;
         padding-left:2vh;
-        height:60vh;
+        height:64vh;
         cursor:pointer;
         background: white;
     }
@@ -298,7 +299,15 @@ $conn = new mysqli($servername, $username, $password,$db);
   
 </style>
     <?php
-$sql="SELECT location_city,address,artist,event_name,photo,date,time,type from events";
+    $servername = "localhost";
+    $username = "root";
+    $password = "12345";
+    $db="projectdbms";
+    
+        
+    $conn = new mysqli($servername, $username, $password,$db);
+            
+$sql="SELECT event_id,location_city,address,artist,event_name,photo,date,time,type,price from events";
 $result=$conn->query($sql);
 
 
@@ -322,19 +331,25 @@ if($result->num_rows>0)
             </div>
             <div class="content">
                 <span id="name"><?php echo $row["event_name"] ?></span>
-                <br><br><br>
+                <br><br>
                 <span id="artist">By- <?php echo $row["artist"] ?></span>
-                <br><br><br>
+                <br><br>
                 <span id="type"><?php echo $row["type"].' Event' ?></span>
-                <br><br><br><br>
-                <span id="address"><?php echo $row["address"].",".$row["location_city"] ?></span>
                 <br><br><br>
+                <span id="address"><?php echo $row["address"].",".$row["location_city"] ?></span>
+                <br><br>
                 <?php
                 $date = date('jS F, Y', strtotime($row["date"]));
                 ?>
-
                 <span id="date"><?php echo $date ." commencing at ".$row["time"] ?></span>
-                
+                <br><br>
+                <span id="price"><?php echo "Price : ".$row["price"].' Rs' ?></span>
+                <br><br>
+                <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+                  <input type="text" style="display:none;" name="eid" value="<?php echo $row['event_id']?>">
+                  <input type="text" style="display:none;" name="price" value="<?php echo $row['price']?>">
+                <input type="submit" name="sub" value="buy">
+                </form>
             </div>    
         </div>
 <?php
@@ -345,6 +360,52 @@ else{
 }
 
 $conn->close();
+?>
+
+<?php
+$conn = new mysqli($servername, $username, $password,$db);
+if(isset($_POST["sub"]))
+{
+  $price=$_POST["price"];
+  $eid=$_POST["eid"];
+  
+  $sql="SELECT credits from customer where customer_id='$cusid'";
+  $result=$conn->query($sql);
+
+  if($result->num_rows>0)
+  {
+    while($row=$result->fetch_assoc())
+    {
+      $totalcredits=$row['credits'];
+      if($totalcredits >= $price)
+      {
+          $t=$totalcredits - $price;
+        try
+        {
+            $conn->autocommit(FALSE);
+            $conn->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
+            $sql="update customer set credits='$t' where customer_id='$cusid'";
+            $conn->query($sql);
+            $sql="insert into account values ('$cusid','$eid')";
+            $conn->query($sql);
+            $conn->commit();
+            $conn->autocommit(TRUE);
+            echo "<script>alert('Success !!');</script>";
+          }
+        catch(Exception $e){
+          echo "<script>alert('Not able to book the event !!');</script>";
+            $conn->rollback();
+            $conn->autocommit(TRUE);
+        }
+      }
+      else{
+        echo "<script>alert('Not Enough credits (:');</script>";
+      }
+    
+    }
+  }
+  
+}
 ?>
 <div class="explore" onclick="abc()">
     <h1 id="explore">Sort By</h1>
@@ -370,6 +431,8 @@ $conn->close();
     </div>  
     <h1 style="float:center; text-align:center; margin-top:70vh; color:white; cursor:pointer;" onclick="cancel()">close</h1>
 <script>
+  
+
 function abc(){
     $(".modal").addClass('animate');
     $(".card1").addClass('animate1');

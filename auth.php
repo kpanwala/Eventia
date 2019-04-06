@@ -49,7 +49,7 @@ Home
        cursor:pointer;
        font-size:2.5vw;
        margin-left:5vw;
-       margin-top:9vh;
+       margin-top:7vh;
        font-family: 'Times New Roman', Times, serif;
    }
    #whole{
@@ -65,7 +65,7 @@ Home
    }
    li:first-child{
     margin-top:0vh;
-    margin-bottom:15vh;
+    margin-bottom:10vh;
     margin-left:0.5vw;
     font-size:5vw;
     font-family:cursive;
@@ -240,6 +240,10 @@ function pro(){
   window.open("profileinfo.php","_self");
 }
 
+function list(){
+  window.open("tickets.php","_self");
+}
+
 </script>
 
 
@@ -247,6 +251,7 @@ function pro(){
     <ul>
             <li>Eventia.</li>
             <li><a href="#">Home</a></li>
+            <li><a onclick="list()">List Tickets</a></li>
             <li ><a onclick="pro()">Change Profile</a></li> 
             <li><a href="#">About us<a href="#"></li>        
     </ul>
