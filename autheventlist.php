@@ -115,6 +115,22 @@ $cusid=$_SESSION["cusid"];
       padding-top:7vh;
     }
 
+    #rot{
+        -ms-transform: rotate(-40deg); 
+        -webkit-transform: rotate(-40deg);
+        transform: rotate(-40deg); 
+        height:5vh;
+        color:white;
+        text-align:center;
+        display:block;
+        font-size:2vw;
+        margin-left:-5vw;
+        margin-top:1vh;
+        position:absolute;
+        width:15vw;
+        background: linear-gradient(to right, rgb(17, 153, 142), rgb(56, 239, 125));
+    }
+
     .card3{
       height:20vh;
       border-radius:20px;
@@ -243,6 +259,7 @@ $cusid=$_SESSION["cusid"];
         padding-bottom:2vh;
         padding-left:2vh;
         height:64vh;
+        position:relative;
         cursor:pointer;
         background: white;
     }
@@ -297,6 +314,32 @@ $cusid=$_SESSION["cusid"];
        
    }
   
+   .button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  border-radius:10px;
+  color: white;
+  padding: 10px 22px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-left: 17vw;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.button1 {
+  background-color: white; 
+  color: black; 
+  border: 2px solid #4CAF50;
+}
+
+.button1:hover {
+  background-color: #4CAF50;
+  color: white;
+}
 </style>
     <?php
     $servername = "localhost";
@@ -306,7 +349,26 @@ $cusid=$_SESSION["cusid"];
     
         
     $conn = new mysqli($servername, $username, $password,$db);
-            
+
+    $sql="select tot_events from customer where customer_id='$cusid'";
+    $result=$conn->query($sql);
+    
+    if($result->num_rows>0)
+    {
+      while($row=$result->fetch_assoc())
+      {
+        $no=$row["tot_events"];
+        if($no>=3){
+          $discount=0;
+        }
+        else{
+          $discount=1;
+        }
+        
+      }
+    }
+
+
 $sql="SELECT event_id,location_city,address,artist,event_name,photo,date,time,type,price from events";
 $result=$conn->query($sql);
 
@@ -317,6 +379,13 @@ if($result->num_rows>0)
     {
     ?>
         <div class='card'>
+        <?php if($no<3)
+        {
+          ?>
+        <div id="rot">10% off</div>
+        <?php
+        }
+        ?>
             <div class='pic'>
                 <img id='photo' src="<?php 
                 if($row["photo"]=="")
@@ -348,7 +417,7 @@ if($result->num_rows>0)
                 <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
                   <input type="text" style="display:none;" name="eid" value="<?php echo $row['event_id']?>">
                   <input type="text" style="display:none;" name="price" value="<?php echo $row['price']?>">
-                <input type="submit" name="sub" value="buy">
+                <input type="submit" class="button button1" name="sub" value="buy">
                 </form>
             </div>    
         </div>
@@ -377,6 +446,10 @@ if(isset($_POST["sub"]))
     while($row=$result->fetch_assoc())
     {
       $totalcredits=$row['credits'];
+      if($discount==1){
+        $price=$price*0.9;
+        echo "<script>alert('Congrats you recieved 10% Off ..!');</script>";
+      }
       if($totalcredits >= $price)
       {
           $t=$totalcredits - $price;
@@ -385,12 +458,31 @@ if(isset($_POST["sub"]))
             $conn->autocommit(FALSE);
             $conn->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
             $sql="update customer set credits='$t' where customer_id='$cusid'";
+            $conn->query($sql);            
+            $sql="update customer set credits=credits+'$price' where customer_id='82954534552'";
+            $conn->query($sql);            
+            $sql="INSERT INTO account(customer_id,event_id,tot) VALUES ('$cusid','$eid',1) ON DUPLICATE KEY UPDATE tot=tot+1;";
             $conn->query($sql);
-            $sql="insert into account values ('$cusid','$eid')";
+            // $sql="select * from account where customer_id='$cusid' and event_id='$eid'";
+            // $result=$conn->query($sql);
+            // if($result->num_rows==0)
+            // {              
+            //     $sql="insert into account values ('$cusid','$eid')";
+            //     $conn->query($sql);           
+            //     $sql="insert into trans values ('$eid',1)";
+            //     $conn->query($sql);            
+            // }
+            // else{
+            //     $sql="update trans set tot=tot+1 where event_id='$eid'";
+            //     $conn->query($sql);            
+            // }
+            $sql="update customer set tot_events=tot_events+1 where customer_id='$cusid'";
             $conn->query($sql);
             $conn->commit();
             $conn->autocommit(TRUE);
+            if($discount==0){
             echo "<script>alert('Success !!');</script>";
+            }
           }
         catch(Exception $e){
           echo "<script>alert('Not able to book the event !!');</script>";

@@ -12,20 +12,14 @@ $db="projectdbms";
 
 $conn = new mysqli($servername, $username, $password,$db);
 
-// $sql="select customer_id from login1 where username='$user'";
-
-// $result=$conn->query($sql);
-
-// if($result->num_rows>0){
-
-    $sql="select customer_id from login2 natural join login1 where username='$user' and password='$pass'";
+$sql="select customer_id from login2 natural join login1 where username='$user' and password='$pass'";
     $result=$conn->query($sql);
     if($result->num_rows==1){
         while($row=$result->fetch_assoc()){        
             
             $_SESSION["cusid"]=$row["customer_id"];
             $ta=$row["customer_id"];
-            if($_SESSION["cusid"]=="46258607946033"){
+            if($_SESSION["cusid"]=="82954534552"){
                 echo "<script>";
                 echo "window.open('admin.php','_self');";
                 echo "</script>";
@@ -39,14 +33,10 @@ $conn = new mysqli($servername, $username, $password,$db);
     }
     else{
         echo '<script language="javascript">';
-        // echo "alert('Incorrect password')";
+        
         echo "alert('Incorrect username or password')";
         echo '</script>'; 
     }
-// }else{
-//     echo '<script language="javascript">';
-//         echo "alert('Incorrect username')";
-//         echo '</script>';       
-// }
+
 
 ?>

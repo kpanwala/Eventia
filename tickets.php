@@ -93,6 +93,12 @@ $conn = new mysqli($servername, $username, $password,$db);
         font-size:1.8vw;
         display:absolute;
     }
+    #quantity{
+        color:white;
+        margin-left:1vw;
+        font-size:1.8vw;
+        display:absolute;
+    }
     .card:nth-child(even){
         background: linear-gradient(to left, rgb(253, 200, 48), rgb(243, 115, 53));
     }
@@ -163,6 +169,8 @@ if($result->num_rows>0)
                 ?></h3>
                 <br>
                 <h5 id="price"><?php echo 'Bought At: '.$row["price"].' Rs' ?></h5>
+                <br>
+                <h5 id="quantity"><?php echo 'Quantity: '.$row["tot"] ?></h5>
             </div>    
         </div>
 <?php

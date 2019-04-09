@@ -16,79 +16,45 @@ $db="projectdbms";
 
 $conn = new mysqli($servername, $username, $password,$db);
 
-    $sql="SELECT * from customer where email='$email'";
-    $result=$conn->query($sql);
+$sql="SELECT * from login2 where username='$user'";
+$result=$conn->query($sql);
 
-    if($result->num_rows==0)
-    {
-
-        $sql="SELECT * from login2 where username='$user'";
-        $result=$conn->query($sql);
         if($result->num_rows==0)
         {
             // echo "<script>alert('$cusid');</script>";
-
-            $sql="insert into customer values ('$cusid','$fname','$lname','$city','$dob','$email','',1000)";
-
-            if (mysqli_query($conn,$sql))
+            try
             {
-                $sql="insert into login2 values ('$pass','$user')";
-                if (mysqli_query($conn,$sql))
-                {
-                    $sql="insert into login1 values ('$cusid','$user')";
+                $conn->autocommit(FALSE);
+                $conn->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
+                    $sql="insert into customer values ('$cusid','$fname','$lname','$city','$dob','$email','',1000,0)";
+
                     if (mysqli_query($conn,$sql))
                     {
-                        echo "<script>window.open('login.php','_self');";
-                        echo "alert('KUDOS !!! Account created :)');</script>";
+                        $sql="insert into login2 values ('$pass','$user')";
+                        if (mysqli_query($conn,$sql))
+                        {
+                            $sql="insert into login1 values ('$cusid','$user')";
+                            if (mysqli_query($conn,$sql))
+                            {
+                                echo "<script>window.open('login.php','_self');";
+                                echo "alert('KUDOS !!! Account created :)');</script>";
+                            }
+                        }    
                     }
-                }    
+                $conn->commit();
+                $conn->autocommit(TRUE);
             }
-
-            $sql="SELECT * from customer";
-            $result=$conn->query($sql);
-
-
-            if($result->num_rows>0)
-            {
-                echo "
-                <table class=\"onsub\">
-                    <tr>
-                        <th>Customer ID             </th>
-                        <th>First Name      </th>
-                        <th>Last name       </th>
-                        <th>City            </th>
-                        <th>dob         </th>
-                        <th>regno                   </th>
-                        <th>email           </th>
-                        <th>photo url           </th>
-                    </tr>";
-                    
-                while($row=$result->fetch_assoc()){
-                    echo "<tr>
-                    <td>".$row["customer_id"]."                 </td>
-                    <td>".$row["first_name"]."              </td>
-                    <td>".$row["last_name"]."               </td>
-                    <td>".$row["city"]."            </td>
-                    <td>".$row["dob"]."         </td>                
-                    <td>".$row["email"]."               </td>
-                    <td>".$row["photo"]."               </td>
-                    </tr>";
-                }
-                echo "</table>";
-            }
-            else{
-                echo "Error adding customer";
+            catch(Exception $e){
+                echo "<script>alert('Not able to register !!');</script>";
+                  $conn->rollback();
+                  $conn->autocommit(TRUE);
             }
 
         }
         else{
             echo "<script>alert('Username already registered !! Please try new one...');</script>";
         }
-    }
-    else{
-        echo "<script>alert('Email already registered !! Please try new one...');</script>";
-    }
-
+    
 
     $conn->close();
     session_destroy();
