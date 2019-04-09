@@ -10,14 +10,9 @@
 
 </head>
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "12345";
-$db="projectdbms";
+session_start();
+$cusid=$_SESSION["cusid"];
 
-    
-$conn = new mysqli($servername, $username, $password,$db);
-    
 ?>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <style>
@@ -37,6 +32,119 @@ $conn = new mysqli($servername, $username, $password,$db);
       animation-fill-mode: forwards;
       webkit-animation-name:ltr;
       webkit-animation-duration:1s;
+    }
+    
+    .ranimate{
+      animation-name:ltr1;
+      animation-duration:1.5s;
+      animation-fill-mode: forwards;
+    }
+    
+    @keyframes ltr {
+      0%   {left:100vw; opacity:0;}      
+      100% {left:0vw; opacity:1;}
+    }
+
+    @webkit-keyframes ltr {
+      0%   {left:100vw; opacity:0;}      
+      100% {left:0vw; opacity:1;}
+    }
+    @keyframes ltr1 {
+      0%   {left:0vw; opacity:1;}
+      /* 90% {left:-100vw; opacity:1;} */
+      100% {left:-100vw; opacity:0;}
+      101% {left:100vw; opacity:0;} 
+    }
+
+    @webkit-keyframes ltr1 {
+        0%   {left:0vw; opacity:1;}
+      /* 90% {left:-100vw; opacity:1;} */
+      100% {left:-100vw; opacity:0;}
+      101% {left:100vw; opacity:0;} 
+    }
+    .main{
+      height:100vh;
+      width:100vw;
+      position:absolute;
+      background-color:yellow;
+    }
+
+    *{
+      margin:0;
+      overflow-x:hidden;
+    }
+
+    .lane{
+      height:35vh;
+      width:100vw;
+      text-align:center;
+      display:block;
+      margin-top:22vh;
+      position:absolute;
+    }
+
+    .card1{
+      height:20vh;
+      padding-top:7vh;
+      position:absolute;
+      cursor:pointer;
+      color:#f64f59;
+      width:15vw;
+      border-radius:20px;
+      box-shadow:1px 1px 2px 2px white;
+      font-size:3vw;
+      text-align:center;
+      vertical-align:middle;
+      margin-left:7vw;      
+      background-color:white;
+    }
+
+    .card2{
+      height:20vh;
+      cursor:pointer;
+      font-size:3vw;
+      border-radius:20px;
+      position:absolute;
+      color:#f64f59;
+      width:15vw;
+      vertical-align:middle;
+      text-align:center;
+      margin-left:30vw;
+      background-color:white;
+      box-shadow:1px 1px 2px 2px white;
+      padding-top:7vh;
+    }
+
+    #rot{
+        -ms-transform: rotate(-40deg); 
+        -webkit-transform: rotate(-40deg);
+        transform: rotate(-40deg); 
+        height:5vh;
+        color:white;
+        text-align:center;
+        display:block;
+        font-size:2vw;
+        margin-left:-5vw;
+        margin-top:1vh;
+        position:absolute;
+        width:15vw;
+        background: linear-gradient(to right, rgb(17, 153, 142), rgb(56, 239, 125));
+    }
+
+    .card3{
+      height:20vh;
+      border-radius:20px;
+      cursor:pointer;
+      font-size:3vw;
+      position:absolute;
+      color:#f64f59;
+      vertical-align:middle;
+      padding-top:7vh;
+      width:15vw;
+      text-align:center;
+      box-shadow:1px 1px 2px 2px white;
+      margin-left:53vw;      
+      background-color:white;
     }
     .card4{
       height:20vh;
@@ -94,101 +202,6 @@ $conn = new mysqli($servername, $username, $password,$db);
       webkit-animation-duration:1s;
     }
 
-    .ranimate{
-      animation-name:ltr1;
-      animation-duration:1.5s;
-      animation-fill-mode: forwards;
-    }
-    
-    @keyframes ltr {
-      0%   {left:100vw; opacity:0;}      
-      100% {left:0vw; opacity:1;}
-    }
-
-    @webkit-keyframes ltr {
-      0%   {left:100vw; opacity:0;}      
-      100% {left:0vw; opacity:1;}
-    }
-    @keyframes ltr1 {
-      0%   {left:0vw; opacity:1;}
-      /* 90% {left:-100vw; opacity:1;} */
-      100% {left:-100vw; opacity:0;}
-      101% {left:100vw; opacity:0;} 
-    }
-
-    @webkit-keyframes ltr1 {
-        0%   {left:0vw; opacity:1;}
-      /* 90% {left:-100vw; opacity:1;} */
-      100% {left:-100vw; opacity:0;}
-      101% {left:100vw; opacity:0;} 
-    }
-    .main{
-      height:100vh;
-      width:100vw;
-      position:absolute;
-      background-color:yellow;
-    }
-
-    *{
-      margin:0;
-      overflow-x:hidden;
-    }
-
-    .lane{
-      height:35vh;
-      width:100vw;
-      text-align:center;
-      display:block;
-      margin-top:25vh;
-      position:absolute;
-    }
-    .card1{
-      height:20vh;
-      padding-top:7vh;
-      position:absolute;
-      cursor:pointer;
-      color:#f64f59;
-      width:15vw;
-      border-radius:20px;
-      box-shadow:1px 1px 2px 2px white;
-      font-size:3vw;
-      text-align:center;
-      vertical-align:middle;
-      margin-left:7vw;      
-      background-color:white;
-    }
-
-    .card2{
-      height:20vh;
-      cursor:pointer;
-      font-size:3vw;
-      border-radius:20px;
-      position:absolute;
-      color:#f64f59;
-      width:15vw;
-      vertical-align:middle;
-      text-align:center;
-      margin-left:30vw;
-      background-color:white;
-      box-shadow:1px 1px 2px 2px white;
-      padding-top:7vh;
-    }
-
-    .card3{
-      height:20vh;
-      border-radius:20px;
-      cursor:pointer;
-      font-size:3vw;
-      position:absolute;
-      color:#f64f59;
-      vertical-align:middle;
-      padding-top:7vh;
-      width:15vw;
-      text-align:center;
-      box-shadow:1px 1px 2px 2px white;
-      margin-left:53vw;      
-      background-color:white;
-    }
     body{
       background:brown;
     }
@@ -206,6 +219,12 @@ $conn = new mysqli($servername, $username, $password,$db);
         font-size:1.8vw;
         display:absolute;
     }
+    #type{
+        color:black;
+        margin-left:20vw;
+        font-size:2vw;
+        display:absolute;
+    }
     
     #address{
         color:black;
@@ -215,6 +234,12 @@ $conn = new mysqli($servername, $username, $password,$db);
     }
 
     #date{
+        color:black;
+        margin-left:0vw;
+        font-size:2vw;
+        display:absolute;
+    }
+    #price{
         color:black;
         margin-left:0vw;
         font-size:2vw;
@@ -233,7 +258,8 @@ $conn = new mysqli($servername, $username, $password,$db);
         padding-top:2vh;
         padding-bottom:2vh;
         padding-left:2vh;
-        height:60vh;
+        height:64vh;
+        position:relative;
         cursor:pointer;
         background: white;
     }
@@ -287,20 +313,63 @@ $conn = new mysqli($servername, $username, $password,$db);
        color:brown;
        
    }
-   #type{
-        color:black;
-        margin-left:20vw;
-        font-size:2vw;
-        display:absolute;
-    }
   
-</style>
-<div>
-   <h1 style="color:white; text-align:center;">Order by Date</h1>
-</div>
+   .button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  border-radius:10px;
+  color: white;
+  padding: 10px 22px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-left: 17vw;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
 
+.button1 {
+  background-color: white; 
+  color: black; 
+  border: 2px solid #4CAF50;
+}
+
+.button1:hover {
+  background-color: #4CAF50;
+  color: white;
+}
+</style>
     <?php
-$sql="SELECT location_city,address,artist,event_name,photo,date,time,type from events order by date";
+    $servername = "localhost";
+    $username = "root";
+    $password = "12345";
+    $db="projectdbms";
+    
+        
+    $conn = new mysqli($servername, $username, $password,$db);
+
+    $sql="select tot_events from customer where customer_id='$cusid'";
+    $result=$conn->query($sql);
+    
+    if($result->num_rows>0)
+    {
+      while($row=$result->fetch_assoc())
+      {
+        $no=$row["tot_events"];
+        if($no>=3){
+          $discount=0;
+        }
+        else{
+          $discount=1;
+        }
+        
+      }
+    }
+
+
+$sql="SELECT event_id,location_city,address,artist,event_name,photo,date,time,type,price from events order by date";
 $result=$conn->query($sql);
 
 
@@ -310,6 +379,13 @@ if($result->num_rows>0)
     {
     ?>
         <div class='card'>
+        <?php if($no<3)
+        {
+          ?>
+        <div id="rot">10% off</div>
+        <?php
+        }
+        ?>
             <div class='pic'>
                 <img id='photo' src="<?php 
                 if($row["photo"]=="")
@@ -323,20 +399,26 @@ if($result->num_rows>0)
                 ?>">
             </div>
             <div class="content">
-            <span id="name"><?php echo $row["event_name"] ?></span>
-                <br><br><br>
+                <span id="name"><?php echo $row["event_name"] ?></span>
+                <br><br>
                 <span id="artist">By- <?php echo $row["artist"] ?></span>
-                <br><br><br>
+                <br><br>
                 <span id="type"><?php echo $row["type"].' Event' ?></span>
-                <br><br><br><br>
-                <span id="address"><?php echo $row["address"].",".$row["location_city"] ?></span>
                 <br><br><br>
-<?php
+                <span id="address"><?php echo $row["address"].",".$row["location_city"] ?></span>
+                <br><br>
+                <?php
                 $date = date('jS F, Y', strtotime($row["date"]));
-?>
-
+                ?>
                 <span id="date"><?php echo $date ." commencing at ".$row["time"] ?></span>
-                
+                <br><br>
+                <span id="price"><?php echo "Price : ".$row["price"].' Rs' ?></span>
+                <br><br>
+                <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+                  <input type="text" style="display:none;" name="eid" value="<?php echo $row['event_id']?>">
+                  <input type="text" style="display:none;" name="price" value="<?php echo $row['price']?>">
+                <input type="submit" class="button button1" name="sub" value="buy">
+                </form>
             </div>    
         </div>
 <?php
@@ -347,6 +429,75 @@ else{
 }
 
 $conn->close();
+?>
+
+<?php
+$conn = new mysqli($servername, $username, $password,$db);
+if(isset($_POST["sub"]))
+{
+  $price=$_POST["price"];
+  $eid=$_POST["eid"];
+  
+  $sql="SELECT credits from customer where customer_id='$cusid'";
+  $result=$conn->query($sql);
+
+  if($result->num_rows>0)
+  {
+    while($row=$result->fetch_assoc())
+    {
+      $totalcredits=$row['credits'];
+      if($discount==1){
+        $price=$price*0.9;
+        echo "<script>alert('Congrats you recieved 10% Off ..!');</script>";
+      }
+      if($totalcredits >= $price)
+      {
+          $t=$totalcredits - $price;
+        try
+        {
+            $conn->autocommit(FALSE);
+            $conn->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
+            $sql="update customer set credits='$t' where customer_id='$cusid'";
+            $conn->query($sql);            
+            $sql="update customer set credits=credits+'$price' where customer_id='82954534552'";
+            $conn->query($sql);            
+            $sql="INSERT INTO account(customer_id,event_id,tot) VALUES ('$cusid','$eid',1) ON DUPLICATE KEY UPDATE tot=tot+1;";
+            $conn->query($sql);
+            // $sql="select * from account where customer_id='$cusid' and event_id='$eid'";
+            // $result=$conn->query($sql);
+            // if($result->num_rows==0)
+            // {              
+            //     $sql="insert into account values ('$cusid','$eid')";
+            //     $conn->query($sql);           
+            //     $sql="insert into trans values ('$eid',1)";
+            //     $conn->query($sql);            
+            // }
+            // else{
+            //     $sql="update trans set tot=tot+1 where event_id='$eid'";
+            //     $conn->query($sql);            
+            // }
+            $sql="update customer set tot_events=tot_events+1 where customer_id='$cusid'";
+            $conn->query($sql);
+            $conn->commit();
+            $conn->autocommit(TRUE);
+            if($discount==0){
+            echo "<script>alert('Success !!');</script>";
+            }
+          }
+        catch(Exception $e){
+          echo "<script>alert('Not able to book the event !!');</script>";
+            $conn->rollback();
+            $conn->autocommit(TRUE);
+        }
+      }
+      else{
+        echo "<script>alert('Not Enough credits (:');</script>";
+      }
+    
+    }
+  }
+  
+}
 ?>
 <div class="explore" onclick="abc()">
     <h1 id="explore">Sort By</h1>
@@ -372,6 +523,8 @@ $conn->close();
     </div>  
     <h1 style="float:center; text-align:center; margin-top:70vh; color:white; cursor:pointer;" onclick="cancel()">close</h1>
 <script>
+  
+
 function abc(){
     $(".modal").addClass('animate');
     $(".card1").addClass('animate1');
@@ -444,7 +597,6 @@ function abc(){
         window.open("typeselect.php","_self");
     },1100);
   }
-
 </script>
 <script src="js/jquery.min.js"></script>
 <script src="js/animatedModal.js"></script>
