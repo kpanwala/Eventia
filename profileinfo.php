@@ -186,7 +186,10 @@
                 
         
         $conn = new mysqli($servername, $username, $password,$db);
-        $sql="select last_name,dob,city,first_name from customer where customer_id='$cusid'";
+        
+        if(isset($_POST["fname"]) or isset($_POST["lname"]) or isset($_POST["dob"]) or isset($_POST["city"]))
+        {
+            $sql="select last_name,dob,city,first_name from customer where customer_id='$cusid'";
 
                 $result=$conn->query($sql);
 
@@ -194,19 +197,30 @@
                 {
                     while($row=$result->fetch_assoc())
                     {
-                        $_SESSION["fname"]=$row["first_name"];
-                        $_SESSION["lname"]=$row["last_name"];
-                        $_SESSION["dob"]=$row["dob"];
-                        $_SESSION["city"]=$row["city"];
+                        $fname=$row["first_name"];
+                        $lname=$row["last_name"];
+                        $dob=$row["dob"];
+                        $city=$row["city"];
                     }
                 }
+                if(test_input($_POST["fname"])!=""){
+                    $fname=test_input($_POST["fname"]);
+                }
+                if(test_input($_POST["lname"])!=""){
+                    $lname=test_input($_POST["lname"]);
+                }
+                if(test_input($_POST["dob"])!=""){
+                    $dob=test_input($_POST["dob"]);
+                }
+                if(test_input($_POST["city"])!=""){
+                    $city=test_input($_POST["city"]);
+                }
+              
+               $_SESSION["fname"]=$fname;
+               $_SESSION["lname"]=$lname;
+               $_SESSION["dob"]=$dob;
+               $_SESSION["city"]=$city;
 
-        if(isset($_POST["fname"]) and isset($_POST["lname"]) and isset($_POST["dob"]) and isset($_POST["city"]))
-        {
-                $_SESSION["fname"]=test_input($_POST["fname"]);
-                $_SESSION["lname"]=test_input($_POST["lname"]);
-                $_SESSION["dob"]=test_input($_POST["dob"]);
-                $_SESSION["city"]=test_input($_POST["city"]);
                 include "cusupdatequery.php"; 
         }  
         if(isset($_FILES["image"])){
@@ -234,7 +248,7 @@
                 $nuser=test_input($_POST["nuser"]);
                 $tp=1;
                 $npass=test_input($_POST["npass"]);
-                $sql="select * from login";
+                $sql="select * from login2";
                 $result=$conn->query($sql);
 
                 while($row=$result->fetch_assoc())
@@ -251,11 +265,37 @@
                 }
                 else
                 {
-                    $sql="update login set username='$nuser', password='$npass' where customer_id='$cusid'";
-                    if($conn->query($sql)){
-                        echo "<script>alert('Account details updated...!');</script>";   
+                    $sql="select username from login1 where customer_id='$cusid'";
+                    $result=$conn->query($sql);
+                    while($row=$result->fetch_assoc())
+                    {
+                        $ccc=$row["username"];
+                    }
+                    if($nuser==""){
+                        $nuser=$ccc;
+                    }
+
+                    $sql="select password from login2 where username='$ccc'";
+                    $result=$conn->query($sql);
+                    while($row=$result->fetch_assoc())
+                    {
+                        $ddd=$row["password"];
+                        $npass=$ddd;
+                    }
+
+                    if(test_input($_POST["npass"])!=""){
+                        $npass=test_input($_POST["npass"]);
+                    }
+                        $sql="update login1 set username='$nuser' where customer_id='$cusid'";
+                        if($conn->query($sql)){
+                            $sql="update login2 set username='$nuser',password='$npass' where username='$ccc'";
+                            if($conn->query($sql))
+                            {
+                                echo "<script>alert('Account details updated...!');</script>";   
+                            }
+                        }
                     }                    
-                }
+                
         } 
 
         

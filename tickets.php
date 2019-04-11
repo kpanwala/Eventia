@@ -19,6 +19,7 @@ $conn = new mysqli($servername, $username, $password,$db);
 <style>
     *{
         margin:0;
+        overflow-x:hidden;
     }
     .onsub{
         position:absolute;
