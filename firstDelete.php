@@ -5,7 +5,7 @@
 <style>
     *{
         margin:0;
-    }
+    }    
     .onsub{
         position:absolute;
         margin-left:30vw;
@@ -236,6 +236,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
                     <li onclick="l4()">Delete by city name</li>
                 </ul>
             </div>
+            <div class="main">
             <div class="fform">
             <h1>Events Delete Form</h1>
             <br><br>
@@ -281,6 +282,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
             <br><br>
             <input type="submit" name="submit" value="Submit">  
             </form>
+            </div>
         </div>
 
         

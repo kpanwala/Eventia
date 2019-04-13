@@ -258,7 +258,7 @@ $cusid=$_SESSION["cusid"];
         padding-top:2vh;
         padding-bottom:2vh;
         padding-left:2vh;
-        height:64vh;
+        height:68vh;
         position:relative;
         cursor:pointer;
         background: white;

@@ -114,9 +114,7 @@ h1,h4,form{
 }
 form{
   width:60vw;
-  margin-left:20vw;
-  margin-right:20vw;
-  background-color:black;
+  margin-left:5vw;
 }
 h1,h4{
   text-align:center;
@@ -127,8 +125,8 @@ h1,h4{
 <?php
 $tp=0;
 $flag=0;
-$nameErr = $idErr = $artistErr = $cityErr= $addressErr =$dateErr=$timeErr= "";
-$id=$name=$address=$city=$artist="";
+$nameErr = $idErr = $artistErr = $cityErr= $addressErr =$dateErr=$timeErr=$typeErr=$priceErr ="";
+$id=$name=$address=$city=$artist=$type=$price="";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST")
 {
@@ -152,11 +150,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
     if(strlen(($_POST["name"]))>50){
         $nameErr = "Id Length exceeding";
         $flag=0;
-    }
-    elseif(!preg_match("/^[a-zA-Z ]*$/",($_POST["name"]))) {
-          $nameErr = "Only letters and white space allowed"; 
-          $flag=0;
-          
     }
     else{
         $name = test_input($_POST["name"]);
@@ -210,6 +203,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
         $_SESSION["time"]=$time;
         $flag=1;
     }
+    
+    
+    if($flag==1)
+    {                  
+        $type =$_POST["type"];
+        $_SESSION["type"]=$type;
+        $flag=1;
+    }
+    if($flag==1)
+    {                  
+        $price=$_POST["price"];
+        $_SESSION["price"]=$price;
+        $flag=1;
+    }
+
+
     if($flag==1)
     {     
       
@@ -277,6 +286,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
                         if($time==""){
                           $time=$row["time"];
                         }
+                        if($type==""){
+                          $type=$row["type"];
+                        }
+                        if($price==""){
+                          $price=$row["price"];
+                        }
                         
                     }
                       if($tp==1)
@@ -285,10 +300,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
                             if(isset($photo))
                             {
                               echo "<script>alert('Photo value is set');</script>";
-                              $sql = "UPDATE events set event_name='$name', location_city='$city', artist='$artist', address='$address',photo='$photo',date='$date',time='$time' where event_id='$id'";
+                              $sql = "UPDATE events set event_name='$name', location_city='$city', artist='$artist', address='$address',photo='$photo',date='$date',time='$time',type='$type',price='$price' where event_id='$id'";
                             }
                             else{
-                              $sql = "UPDATE events set event_name='$name', location_city='$city', artist='$artist', address='$address',date='$date',time='$time' where event_id='$id'";
+                              $sql = "UPDATE events set event_name='$name', location_city='$city', artist='$artist', address='$address',date='$date',time='$time',type='$type',price='$price' where event_id='$id'";
                             }
 
                             if (mysqli_connect_errno())
@@ -331,12 +346,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
             Location City:<input type="text" name="city">
             <span class="error"> <?php echo $cityErr;?></span>
             <br><br>
-            <br><br>
             Date:<input type="date" name="date">
             <span class="error"> <?php echo $dateErr;?></span>
             <br><br>
             Time:<input type="time" name="time">
             <span class="error"> <?php echo $timeErr;?></span>            
+            <br><br>
+            Type:<input type="text" name="type">
+            <span class="error"> <?php echo $typeErr;?></span>
+            <br><br>
+            Price:<input type="text" name="price">
+            <span class="error"> <?php echo $priceErr;?></span>            
             <br><br>
             <span><b>Select image to upload: </b></span><br>
             <input type="file" name="image"><br><br>

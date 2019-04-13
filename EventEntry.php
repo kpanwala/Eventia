@@ -142,8 +142,8 @@ span{
 
 <?php
   
-        $nameErr = $idErr = $artistErr = $cityErr= $addressErr = $timeErr=$dateErr=$typeErr="";
-        $name = $id = $address = $artist = $city = "";
+        $nameErr = $idErr = $artistErr = $cityErr= $addressErr = $timeErr=$dateErr=$typeErr=$priceErr="";
+        $name = $id = $address = $artist = $city = $type=$price="";
        
       $flag=0;
       if(isset($_POST['submit']))
@@ -173,10 +173,6 @@ span{
                   $nameErr = "Id Length exceeding";
                   $flag=0;
               }
-              elseif(!preg_match("/^[a-zA-Z ]*$/",($_POST["name"]))) {
-                  $nameErr = "Only letters and white space allowed"; 
-                  $flag=0;
-              }
               else{
                 $name = test_input($_POST["name"]);
                 $_SESSION["name"]=$name;
@@ -194,6 +190,20 @@ span{
                 $type = test_input($_POST["type"]);
                 echo "<script>alert($type)</script>;";
                 $_SESSION["type"]=$type;
+                $flag=1;
+              }
+            }
+            if($flag==1)
+            {
+              
+              if(empty($_POST["price"])) {
+                  $priceErr = "Price is required";
+                  $flag=0;
+              }      
+              else{
+                $price = test_input($_POST["price"]);
+                echo "<script>alert($type)</script>;";
+                $_SESSION["price"]=$price;
                 $flag=1;
               }
             }
@@ -355,6 +365,9 @@ span{
   <br>
   Time:<input type="time" name="time">
   <span class="error">* <?php echo $timeErr;?></span>
+  <br>
+  Price:<input type="price" name="price">
+  <span class="error">* <?php echo $priceErr;?></span>
   <br>
   <span><b>Select image to upload: </b></span><br>
   <input type="file" name="image"><br><br>
